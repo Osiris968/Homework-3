@@ -42,11 +42,11 @@ MovieMap load(const std::string& filePath) {
   return db;
 }
 
-void findMovie(const MovieMap& db, int id) {
+void findMovie(const MovieMap& db, const int id) {
   if (db.find(id) != db.end()) {
     std::cout << db.at(id) << std::endl;
   } else {
-    std::cout << "ID " << id << " not found!\n";
+    std::cout << "ID " << id << " not found!" << std::endl;
   }
 }
 
@@ -57,34 +57,27 @@ void searchMovie(const MovieMap& db, std::string& keyword) {
 int main(int argc, char** argv) {
   // Load the movie database from a given file.
   MovieMap db = load("./movies_db.txt");
-  // Let the user search for a movie using a string or an integer.
-  std::string keyword, value;
+
+  std::string command, value, line;
   int id;
-  // std::cout << "Enter a command: " << std::endl;
-  // std::cin >> keyword >> value;
-  // std::stringstream ss(value);
 
-  while (keyword != "exit") {
+  while (true) {
     std::cout << "Enter a command: " << std::endl;
-    std::cin >> keyword >> value;
-    std::stringstream ss(value);
+    std::getline(std::cin, line);
+    std::istringstream iss(line);
+    iss >> command;
 
-    if (ss >> id && ss.eof()) {
-      findMovie(db, id);
+    if (command == "exit") {
+      break;
+    }
+    iss >> value;
+
+    // std::stringstream ss(value);
+    if (command == "find") {
+      findMovie(db, std::stoi(value));
     } else {
       searchMovie(db, value);
     }
   }
-
   return 0;
-
-  // if (keyword == "exit") {
-  //   return 0;
-  //   std::cout << "test";
-  // } else if (ss >> id && ss.eof()) {
-  //   findMovie(db, id);
-  // } else {
-  //   searchMovie(db, value);
-  // }
-
 }
