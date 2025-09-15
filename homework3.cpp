@@ -57,7 +57,16 @@ void findMovie(const MovieMap& db, const int id) {
 }
 
 void searchMovie(const MovieMap& db, std::string& value) {
-  
+  int count = 0;
+  for (const auto& movie : db) {
+    std::string entry = to_string(movie.second);
+    if (entry.find(value) != std::string::npos) {
+      std::cout << entry << std::endl;
+      count++;
+    }
+  }
+  std::cout << "Movies found with given parameters: " 
+  << count << std::endl;
 }
 
 int main(int argc, char** argv) {
@@ -71,7 +80,7 @@ int main(int argc, char** argv) {
   // }
   // std::cout << std::endl;
 
-  std::string command, value, line;
+  std::string command, line;
   int id;
 
   while (true) {
@@ -83,9 +92,10 @@ int main(int argc, char** argv) {
     if (command == "exit") {
       break;
     }
-    iss >> value;
+    
+    std::string value;
+    std::getline(iss, value);
 
-    // std::stringstream ss(value);
     if (command == "find") {
       findMovie(db, std::stoi(value));
     } else {
