@@ -56,7 +56,7 @@ void findMovie(const MovieMap& db, const int id) {
   }
 }
 
-void searchMovie(const MovieMap& db, std::string& keyword) {
+void searchMovie(const MovieMap& db, std::string& value) {
   
 }
 
