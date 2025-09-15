@@ -32,12 +32,18 @@ MovieMap load(const std::string& filePath) {
   }
   // Create the map to be populated and returned.
   MovieMap db;
+  std::string line;
 
-  Movie movie;
-  while (data >> movie) {
+  while (std::getline(data, line)) {
+    // Skip comment line.
+    if (line[0] == '#') {
+      continue;
+    }
+    std::istringstream iss(line);
+    Movie movie;
+    iss >> movie;
     db[movie.getID()] = movie;
   }
-
   // Return the map of the movies.
   return db;
 }
@@ -57,6 +63,13 @@ void searchMovie(const MovieMap& db, std::string& keyword) {
 int main(int argc, char** argv) {
   // Load the movie database from a given file.
   MovieMap db = load("./movies_db.txt");
+
+  // Debug: Print all loaded IDs
+  // std::cout << "Loaded IDs: ";
+  // for (const auto& pair : db) {
+  //   std::cout << pair.first << " ";
+  // }
+  // std::cout << std::endl;
 
   std::string command, value, line;
   int id;
