@@ -52,11 +52,14 @@ void findMovie(const MovieMap& db, const int id) {
   if (db.find(id) != db.end()) {
     std::cout << db.at(id) << std::endl;
   } else {
-    std::cout << "ID " << id << " not found!" << std::endl;
+    std::cout << "Movie with ID " << id << 
+    " not found in database." << std::endl;
+    // std::cout << "ID " << id << " not found!" << std::endl;
   }
 }
 
 void searchMovie(const MovieMap& db, std::string& value) {
+  // Count how many movies the search found.
   int count = 0;
   for (const auto& movie : db) {
     std::string entry = to_string(movie.second);
@@ -65,37 +68,36 @@ void searchMovie(const MovieMap& db, std::string& value) {
       count++;
     }
   }
-  std::cout << "Movies found with given parameters: " 
-  << count << std::endl;
+  // Print the counter.
+  std::cout << "Found " << count << " matche(s)" << std::endl;
 }
 
 int main(int argc, char** argv) {
   // Load the movie database from a given file.
   MovieMap db = load("./movies_db.txt");
 
-  // Debug: Print all loaded IDs
-  // std::cout << "Loaded IDs: ";
-  // for (const auto& pair : db) {
-  //   std::cout << pair.first << " ";
-  // }
-  // std::cout << std::endl;
-
   std::string command, line;
-  int id;
 
   while (true) {
-    std::cout << "Enter a command: " << std::endl;
+    // Assign values to variables from the user input.
+    std::cout << "Enter a command:" << std::endl;
     std::getline(std::cin, line);
     std::istringstream iss(line);
     iss >> command;
 
-    if (command == "exit") {
-      break;
-    }
-    
+    // Quit the program if the user wants to exit.
+    if (command == "exit") { break; }
+
     std::string value;
     std::getline(iss, value);
 
+    // Ignore any spaces in front of commands
+    size_t first = value.find_first_not_of(' ');
+    if (first != std::string::npos) {
+      value = value.substr(first);
+    } else { value = ""; }
+
+    // Call helper methods to find movie IDs or search.
     if (command == "find") {
       findMovie(db, std::stoi(value));
     } else {
